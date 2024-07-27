@@ -16,7 +16,9 @@ git clone --depth=1 https://github.com/zhengmz/luci-app-zerotier.git feeds/luci/
 
 # 加载
 ./scripts/feeds update -f luci
+
 ./scripts/feeds install -p luci -f luci-app-zerotier
+
 make defconfig
 
 # 编译
