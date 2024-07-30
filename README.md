@@ -28,7 +28,7 @@ docker run -it -v $PWD/bin:/builder/bin openwrt/sdk:x86-64-22.03.5 bash
 ./scripts/feeds update -a
 
 # 拷贝到合适目录，如
-git clone --depth=1 https://github.com/zhengmz/luci-app-zerotier.git feeds/luci/applications/luci-app-zerotier
+git clone --depth=1 https://github.com/mmc1987/luci-app-zerotier.git feeds/luci/applications/luci-app-zerotier
 
 # 加载
 ./scripts/feeds update -f luci
