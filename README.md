@@ -19,15 +19,20 @@ LuCI for ZeroTier / ZeroTier 的 LuCI 管理界面
 
 ```shell
 # 安装依赖
-apt update -y
-apt full-upgrade -y
-apt install -y ack antlr3 asciidoc autoconf automake autopoint binutils bison build-essential \
+sudo apt update -y && sudo apt full-upgrade -y
+
+sudo apt install -y \
+ack antlr3 asciidoc autoconf automake autopoint binutils bison build-essential \
 bzip2 ccache cmake cpio curl device-tree-compiler fastjar flex gawk gettext gcc-multilib g++-multilib \
 git gperf haveged help2man intltool libc6-dev-i386 libelf-dev libfuse-dev libglib2.0-dev libgmp3-dev \
 libltdl-dev libmpc-dev libmpfr-dev libncurses5-dev libncursesw5-dev libpython3-dev libreadline-dev \
 libssl-dev libtool lrzsz mkisofs msmtp ninja-build p7zip p7zip-full patch pkgconf python3 \
 python3-pyelftools python3-setuptools qemu-utils rsync scons squashfs-tools subversion swig texinfo \
-uglifyjs upx-ucl unzip vim wget xmlto xxd zlib1g-dev
+uglifyjs upx-ucl unzip vim wget xmlto xxd zlib1g-dev bc lm-sensors pciutils libpam0g-dev libkmod-dev \
+liblzma-dev libpcre2-dev libsnmp-dev libcurl4-openssl-dev libtins-dev libyaml-cpp-dev libgpiod-dev \
+libtirpc-dev libaio-dev
+
+
 # 进入 OpenWrt SDK 目录，建议使用 Docker，如:
 docker run -it -v $PWD/bin:/builder/bin openwrt/sdk:x86-64-22.03.5 bash
 
@@ -36,6 +41,9 @@ docker run -it -v $PWD/bin:/builder/bin openwrt/sdk:x86-64-22.03.5 bash
 #   - 获取依赖包 zerotier 编译信息 (feeds/packages/net)
 #   - 获取 feeds/luci/applications 目录
 ./scripts/feeds update -a
+./scripts/feeds install -a
+make menuconfig
+
 
 # 拷贝到合适目录，如
 git clone --depth=1 https://github.com/mmc1987/luci-app-zerotier.git feeds/luci/applications/luci-app-zerotier
@@ -48,20 +56,12 @@ make defconfig
 # 编译
 make package/luci-app-zerotier/compile
 
+make download -j8
+make V=s -j1
+
+
 # 结果
 # 存放在 bin/packages/x86_64/luci 目录
 luci-app-zerotier*.ipk
 luci-i18n-zerotier-zh-cn*.ipk
-```
-
-## Usage / 使用
-
-```shell
-# 与 zerotier 服务有冲突，建议禁用，两种方式 (Only For v1.1)
-
-# 1. 使用禁用命令
-/etc/init.d/zerotier disable
-
-# 2. 定制固件时增加参数
-DISABLED_SERVICES="zerotier"
 ```
